@@ -35,6 +35,7 @@
           <th>ID</th>
           <th>Foto</th>
           <th>Nome</th>
+          <th>Categoria</th>
           <th>Preço de venda</th>
           <th>Data de expiração</th>
           <th>Ativo</th>
@@ -53,6 +54,7 @@
               {% endif %}
             </td>
             <td>{{ product.name|title|truncatechars:20 }}</td>
+            <td>{{ product.category.name|title|default:"Sem categoria" }}</td>
             <td>R$ {{ product.sale_price|floatformat:2 }}</td>
             <td>
               {% if product.is_perishable %}

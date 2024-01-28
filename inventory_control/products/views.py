@@ -33,7 +33,7 @@ def search(request):
     # Filtrando os fornecedores
     # O Q é usado para combinar filtros (& ou |)
     products = Product.objects \
-        .filter(name__icontains=search_value) \
+        .filter(Q(name__icontains=search_value) | Q(category__name__icontains=search_value)) \
         .order_by("-id")
     
     # Criando o paginator
@@ -49,16 +49,16 @@ def create(request):
     form_action = reverse("products:create")
     # POST
     if request.method == 'POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
         
         if form.is_valid():
             form.save()
             
-            messages.success(request, "O fornecedor foi cadastrado com sucesso!")
+            messages.success(request, "O produto foi cadastrado com sucesso!")
             
             return redirect("products:index")
         
-        messages.error(request, "Falha ao cadastrar o fornecedor. Verifique o preenchimento dos campos.")
+        messages.error(request, "Falha ao cadastrar o produto. Verifique o preenchimento dos campos.")
         
         context = { "form": form, "form_action": form_action }
         
@@ -72,16 +72,19 @@ def create(request):
     return render(request, "products/create.html", context)
 
 def update(request, slug):
-    supplier = get_object_or_404(Product, slug=slug)
+    product = get_object_or_404(Product, slug=slug)
     form_action = reverse("products:update", args=(slug,)) # Obtendo a URL da rota de atualização
     
     # POST
     if request.method == "POST":
-        form = ProductForm(request.POST, instance=supplier)
+        form = ProductForm(request.POST, request.FILES, instance=product)
         
         if form.is_valid():
+            if form.cleaned_data["photo"] is False:
+                product.thumbnail.delete(save=False)
+
             form.save()            
-            messages.success(request, "Fornecedor atualizado com sucesso")            
+            messages.success(request, "Produto atualizado com sucesso")            
             return redirect("products:index")
         
         context = {
@@ -92,7 +95,7 @@ def update(request, slug):
         return render(request, "products/create.html", context)
     
     # GET
-    form = ProductForm(instance=supplier)
+    form = ProductForm(instance=product)
     
     context = {
         "form_action": form_action,
@@ -103,16 +106,16 @@ def update(request, slug):
 
 @require_POST
 def delete(request, id):
-    supplier = get_object_or_404(Product, pk=id)
-    supplier.delete()
+    product = get_object_or_404(Product, pk=id)
+    product.delete()
     
     return redirect("products:index")
 
 @require_POST
 def toggle_enabled(request, id):
-    supplier = get_object_or_404(Product, pk=id)
+    product = get_object_or_404(Product, pk=id)
     
-    supplier.enabled = not supplier.enabled
-    supplier.save()
+    product.enabled = not product.enabled
+    product.save()
     
     return JsonResponse({ "message": "success" })
