@@ -251,6 +251,14 @@ def update_category(request, slug):
     
     return render(request, "categories/create.html", context)
 
+
+@require_POST
+def delete_supplier_from_product(request, id):
+    supplier_product = get_object_or_404(SupplierProduct, pk=id)
+    supplier_product.delete()
+
+    return JsonResponse({ "message": "success" })
+
 @require_POST
 def delete_category(request, id):
     category = get_object_or_404(Category, pk=id)

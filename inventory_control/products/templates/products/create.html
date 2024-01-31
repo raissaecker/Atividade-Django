@@ -60,7 +60,10 @@
                         </div>
                         <div class="col-md-2">
                             <div class="d-grid">
-                                <button type="button" class="btn btn-danger remove-btn">
+                                <button 
+                                {% if supplier.id.value %}data-url="{% url "products:delete_supplier" supplier.id.value %}"{% endif %}
+                                type="button" 
+                                class="btn btn-danger remove-btn">
                                     <i class="bi bi-x"></i>
                                 </button>
                             </div>

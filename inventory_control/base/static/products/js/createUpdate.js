@@ -25,5 +25,16 @@ jQuery(function() {
 
         $button.closest(".row").remove();
         $totalSuppliers.val(parseInt($totalSuppliers.val()) - 1);
+
+        const url = $button.data("url");
+        if (url) {
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": Cookies.get("csrftoken")
+                }
+            })
+            .catch(console.error);
+        }
     });
 });
