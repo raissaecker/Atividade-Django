@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ["thumbnail", "slug", "is_perishable"]
+        exclude = ["thumbnail", "slug", "is_perishable", "suppliers"]
 
         labels = {
             "name": "Nome",
@@ -62,7 +62,7 @@ SupplierProductFormSet = forms.inlineformset_factory(
     form=SupplierProductForm,
     extra=1,
     can_delete=True,
-    max_num=1
+    max_num=1,
 )
 
     

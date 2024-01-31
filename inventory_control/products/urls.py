@@ -14,4 +14,5 @@ urlpatterns = [
     path("category/search", views.search_categories, name="categories_search"),
     path("categorias/<slug:slug>/", views.update_category, name="category_update"),
     path("<slug:slug>/", views.update, name="update"),
+    path("<int:id>/suppliers/", views.get_suppliers_from_product, name="suppliers"),
 ]

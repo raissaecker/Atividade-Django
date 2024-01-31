@@ -4,7 +4,7 @@
 {% block title %}Cadastro de Produtos{% endblock  %}
 {% block head %}
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-    <script src="{% static 'products/createUpdate.js' %}"></script>
+    <script src="{% static 'products/js/createUpdate.js' %}"></script>
 {% endblock %}
 {% block content %}
     {% with create_url="/fornecedores/cadastro" %}
@@ -13,7 +13,7 @@
         {% else %}
             <h2 class="mb-3">Edição de Fornecedor</h2>
         {% endif %}
-        <form action="{{ form_action }}" method="post" enctype="multiform/form-data" novalidate>
+        <form action="{{ form_action }}" method="post" enctype="multipart/form-data" novalidate>
             {% csrf_token %}
             
             <div class="row mb-3">
@@ -51,7 +51,7 @@
                 {{ supplier_product_formset.management_form }}
                 {% for supplier in supplier_product_formset %}
                     <div class="row">
-                        {{ form.id }}
+                        {{ supplier.id }}
                         <div class="col-md-5">
                             {{ supplier.supplier|as_crispy_field }}
                         </div>
